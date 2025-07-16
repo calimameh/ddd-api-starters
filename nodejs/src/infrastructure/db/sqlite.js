@@ -1,5 +1,6 @@
-const Database = require('better-sqlite3');
-const config = require('../../config');
+import Database from 'better-sqlite3';
+import config from '../../config/index.js';
+
 const db = new Database(config.db.uri);
 
 function ensureTable(collection) {
@@ -11,7 +12,7 @@ function ensureTable(collection) {
   `).run();
 }
 
-module.exports = {
+const sqliteAdapter = {
   insert: async (collection, item) => {
     ensureTable(collection);
     const stmt = db.prepare(`INSERT INTO ${collection} (id, data) VALUES (?, ?)`);
@@ -32,7 +33,7 @@ module.exports = {
   },
 
   update: async (collection, id, updates) => {
-    const existing = await module.exports.findById(collection, id);
+    const existing = await sqliteAdapter.findById(collection, id);
     if (!existing) return null;
     const updated = { ...existing, ...updates };
     db.prepare(`UPDATE ${collection} SET data = ? WHERE id = ?`).run(JSON.stringify(updated), id);
@@ -42,5 +43,7 @@ module.exports = {
   remove: async (collection, id) => {
     const stmt = db.prepare(`DELETE FROM ${collection} WHERE id = ?`);
     return stmt.run(id).changes > 0;
-  }
+  },
 };
+
+export default sqliteAdapter;

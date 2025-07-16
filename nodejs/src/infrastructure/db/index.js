@@ -1,14 +1,18 @@
-const config = require('../../config');
+import config from '../../config/index.js';
+
+let adapter;
 
 switch (config.db.type) {
   case 'sqlite':
-    module.exports = require('./sqlite');
+    adapter = await import('./sqlite.js');
     break;
   case 'mongo':
-    module.exports = require('./mongo');
+    adapter = await import('./mongo.js');
     break;
   case 'memory':
   default:
-    module.exports = require('./memory');
+    adapter = await import('./memory.js');
     break;
 }
+
+export default adapter.default;

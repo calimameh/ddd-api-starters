@@ -1,6 +1,7 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
-module.exports = {
+export default {
   env: process.env.NODE_ENV || 'development',
   port: process.env.PORT || 3000,
   db: {

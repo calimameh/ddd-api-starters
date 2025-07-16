@@ -4,7 +4,7 @@ function ensureCollection(collection) {
   if (!store[collection]) store[collection] = [];
 }
 
-module.exports = {
+const memoryAdapter = {
   insert: async (collection, item) => {
     ensureCollection(collection);
     store[collection].push(item);
@@ -37,3 +37,5 @@ module.exports = {
     return true;
   }
 };
+
+export default memoryAdapter;

@@ -1,14 +1,19 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { pathToFileURL } from 'url';
+import { fileURLToPath } from 'url';
 
-module.exports = function (app) {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export default async function loader(app) {
   const routesDir = path.join(__dirname, '../routes');
   const files = fs.readdirSync(routesDir);
 
-  files.forEach((file) => {
+  for (const file of files) {
     if (file.endsWith('.js')) {
-      const route = require(path.join(routesDir, file));
-      app.use('/', route); // or dynamic prefix based on module
+      const routeModule = await import(pathToFileURL(path.join(routesDir, file)).href);
+      app.use('/', routeModule.default); // Make sure route file uses `export default router`
     }
-  });
-};
+  }
+}

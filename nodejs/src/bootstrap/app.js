@@ -1,6 +1,6 @@
-const express = require('./express');
-const loader = require('./loader');
+import app from './express.js';
+import loader from './loader.js';
 
-loader(express); // Dynamically loads routes, etc.
+loader(app); // Dynamically loads routes, etc.
 
-module.exports = express;
+export default app;

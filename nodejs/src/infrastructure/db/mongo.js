@@ -1,19 +1,21 @@
-const { MongoClient } = require('mongodb');
-const config = require('../../config');
+import { MongoClient } from 'mongodb';
+import config from '../../config/index.js';
 
-const client = new MongoClient(config.db.uri, { useUnifiedTopology: true });
+const client = new MongoClient(config.db.uri, {
+  useUnifiedTopology: true,
+});
 
 let db;
 
 async function getDb() {
   if (!db) {
     await client.connect();
-    db = client.db(); // Use DB name from URI
+    db = client.db(); // Uses DB name from URI
   }
   return db;
 }
 
-module.exports = {
+const mongoAdapter = {
   insert: async (collection, item) => {
     const db = await getDb();
     await db.collection(collection).insertOne(item);
@@ -44,5 +46,7 @@ module.exports = {
     const db = await getDb();
     const res = await db.collection(collection).deleteOne({ id });
     return res.deletedCount > 0;
-  }
+  },
 };
+
+export default mongoAdapter;
