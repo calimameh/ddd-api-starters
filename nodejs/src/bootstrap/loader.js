@@ -13,7 +13,7 @@ export default async function loader(app) {
   for (const file of files) {
     if (file.endsWith('.js')) {
       const routeModule = await import(pathToFileURL(path.join(routesDir, file)).href);
-      app.use('/', routeModule.default); // Make sure route file uses `export default router`
+      app.use('/api/v1/', routeModule.default); // Make sure route file uses `export default router`
     }
   }
 }
