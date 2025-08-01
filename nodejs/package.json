@@ -6,7 +6,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+    "test": "npm run test:jest && npm run test:mocha",
+    "test:jest": "jest",
+    "test:mocha": "mocha tests/mocha/**/*.test.js"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +26,8 @@
   "devDependencies": {
     "jest": "^29.7.0",
     "jest-environment-node": "^29.7.0",
+    "mocha": "^11.7.1",
+    "mocha-when-then": "^0.4.2",
     "supertest": "^7.1.4"
   }
 }
